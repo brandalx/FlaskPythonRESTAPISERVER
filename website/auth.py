@@ -17,6 +17,23 @@ def logout():
 
 @auth.route("/signup", methods=["GET", "POST"])
 def signup():
+    if request.method == "POST":
+        email = request.form.get("email")
+        firstName = request.form.get("firstName")
+        password1 = request.form.get("password1")
+        password2 = request.form.get("password2")
+
+        if len(email) < 4:
+            pass
+        elif len(firstName) < 2:
+            pass
+        elif password1 != password2:
+            pass
+        elif len(password1) < 7:
+            pass
+        else:
+            # add user to db
+            pass
     return render_template("signup.html")
 
 
