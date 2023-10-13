@@ -26,12 +26,14 @@ def login():
         else:
             flash("Email does not exist", category="error")
 
-    return render_template("login.html")
+    return render_template("login.html", user=current_user)
 
 
 @auth.route("/logout")
+@login_required
 def logout():
-    return "<p>Logout init</p>"
+    logout_user()
+    return redirect(url_for("auth.login"))
 
 
 @auth.route("/signup", methods=["GET", "POST"])
@@ -45,7 +47,7 @@ def signup():
         user = User.query.filter_by(email=email).first()
         if user:
             flash("Email already exists", category="error")
-            return render_template("signup.html")
+            return render_template("signup.html", user=current_user)
 
         if len(email) < 4:
             flash("Email must be greater than 4 characters", category="error")
@@ -67,7 +69,7 @@ def signup():
             flash("Account created successfully", category="success")
             return redirect(url_for("views.home"))
 
-    return render_template("signup.html")
+    return render_template("signup.html", user=current_user)
 
 
 # for testing purposes
