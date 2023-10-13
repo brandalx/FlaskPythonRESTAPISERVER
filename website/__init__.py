@@ -1,3 +1,4 @@
+from os import path
 import os
 from dotenv import load_dotenv
 from flask import Flask
@@ -20,4 +21,14 @@ def create_app():
     app.register_blueprint(views, url_perfix="/")
     app.register_blueprint(auth, url_perfix="/")
 
+    from .models import User, Note
+
+    create_database(app)
+
     return app
+
+
+def create_database(app):
+    if not path.exists("website/" + DB_NAME):
+        db.create_all(app=app)
+        print("Created Database!")
