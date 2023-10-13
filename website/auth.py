@@ -1,4 +1,8 @@
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, redirect, url_for
+from .models import User
+from werkzeug.security import generate_password_hash, check_password_hash
+from . import db
+
 
 auth = Blueprint("auth", __name__)
 
@@ -34,7 +38,14 @@ def signup():
                 "Password is too short, it should be at leat 7 characters ", category="error")
         else:
             # add user to db
+            new_user = User(email=email, first_name=firstName,
+                            password=generate_password_hash(password1, method='sha256'))
+
+            db.session.add(new_user)
+            db.session.commit()
             flash("Account created successfully", category="success")
+            return redirect(url_for("views.home"))
+
     return render_template("signup.html")
 
 
